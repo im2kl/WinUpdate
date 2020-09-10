@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,12 +15,15 @@ namespace WindowsUpdateAgent
 
             UpdateSession session = new UpdateSession();
 
-            var lookup = session.CreateUpdateSearcher();
-            
+            Console.WriteLine("session start");
+            var updateSearcher = session.CreateUpdateSearcher();
+           
             Console.WriteLine("Searching... async");
-            var results = lookup.Search(""); // parameters for search
+            var results = updateSearcher.Search(""); // parameters for search
 
-            foreach (IUpdate upd in results.Updates)
+            UpdateCollection collection = new UpdateCollection();
+
+            foreach (IUpdate5 upd in results.Updates)
             {
                 // these can be leveraged for a profile install 
                 if (upd.AutoSelectOnWebSites &&
@@ -29,8 +33,14 @@ namespace WindowsUpdateAgent
                     (upd.InstallationBehavior.RebootBehavior == InstallationRebootBehavior.irbNeverReboots))
                 {
                     Console.WriteLine(upd.Title);
+                    collection.Add(upd);
+
+                    var json = JsonConvert.SerializeObject(upd.ToString(), Formatting.Indented);
+                    Console.WriteLine(json.ToString());
                 }
             }
+
+
             Console.ReadKey();
         }
     }
