@@ -33,13 +33,23 @@ namespace WindowsUpdateAgent
                     (upd.InstallationBehavior.RebootBehavior == InstallationRebootBehavior.irbNeverReboots))
                 {
                     Console.WriteLine(upd.Title);
+                    
+                    for(int i =0;i < upd.KBArticleIDs.Count ;i++)
+                    {
+                        Console.WriteLine(upd.KBArticleIDs[i]);
+                    }
+
                     collection.Add(upd);
+                   //
+                   // add to custom class
+                   //
 
                     var json = JsonConvert.SerializeObject(upd.ToString(), Formatting.Indented);
                     Console.WriteLine(json.ToString());
                 }
             }
 
+            // https://social.msdn.microsoft.com/Forums/en-US/8789e9e1-444b-4968-930a-1137681b17c4/how-can-i-query-for-an-accurate-and-localized-list-of-windows-updates-installed-on-a-machine-using?forum=csharpgeneral
 
             Console.ReadKey();
         }
