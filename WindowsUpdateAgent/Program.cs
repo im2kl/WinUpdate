@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using WUApiLib;
@@ -19,7 +20,7 @@ namespace WindowsUpdateAgent
             var updateSearcher = session.CreateUpdateSearcher();
            
             Console.WriteLine("Searching... async");
-            var results = updateSearcher.Search(""); // parameters for search
+            var results = updateSearcher.Search("IsInstalled = 0 and IsHidden = 0"); // parameters for search
 
             UpdateCollection collection = new UpdateCollection();
 
@@ -37,6 +38,13 @@ namespace WindowsUpdateAgent
                     for(int i =0;i < upd.KBArticleIDs.Count ;i++)
                     {
                         Console.WriteLine(upd.KBArticleIDs[i]);
+                        Console.WriteLine(upd.Identity.UpdateID);
+
+                        Console.WriteLine("Superceeds:");
+                        for (int j = 0; j < upd.SupersededUpdateIDs.Count; j++)
+                        {
+                            Console.WriteLine(upd.SupersededUpdateIDs[j].ToString());
+                        }
                     }
 
                     collection.Add(upd);

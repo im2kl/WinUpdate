@@ -6,10 +6,37 @@ using System.Threading.Tasks;
 
 namespace WindowsUpdateAgent
 {
-    class WUpdate
-    {
+	public class WUpdate
+	{
+		// Identity > GUID
+		public Identity Identity { get; set; }
+		public string Title { get; set; }
+		public string Description { get; set; }
+		public bool EulaAccepted { get; set; }
+		public bool RebootRequired { get; set; }
+		public ICollection<Identity> Superseded { get; set; }
+	}
 
-		/*
+	public class Identity 
+	{
+		//public int RevisionNumber { get; set; } removing revision for the time being
+		public string UpdateID { get; set; }
+	}
+
+	/*
+	-		Identity	{System.__ComObject
+}
+System.__ComObject
+- Dynamic View Expanding the Dynamic View will get the dynamic members for the object	
+		RevisionNumber	200	System.Int32
+		UpdateID	"902a3559-18dc-4219-a6c6-818c55fe0a47"	System.String
+
+
+
+		// SupersededUpdateIDs > GUIDs
+
+
+		
          		AutoDownload	0	System.Int32
 		AutoSelection	0	System.Int32
 		AutoSelectOnWebSites	true	System.Boolean
@@ -61,5 +88,5 @@ namespace WindowsUpdateAgent
 +		UninstallationSteps	{System.__ComObject}	System.__ComObject
 
          */
-	}
+
 }
