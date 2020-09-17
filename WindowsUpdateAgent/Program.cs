@@ -24,6 +24,9 @@ namespace WindowsUpdateAgent
 
             UpdateCollection collection = new UpdateCollection();
 
+
+            ICollection<WUpdate> wupdateCollection = new WUpdateCollection().WUpdateCol;
+
             foreach (IUpdate5 upd in results.Updates)
             {
                 // these can be leveraged for a profile install 
@@ -44,6 +47,15 @@ namespace WindowsUpdateAgent
                         for (int j = 0; j < upd.SupersededUpdateIDs.Count; j++)
                         {
                             Console.WriteLine(upd.SupersededUpdateIDs[j].ToString());
+                        }
+
+                        Console.WriteLine("Categories:");
+                        var cat = upd.Categories;
+                        for (int j = 0; j < cat.Count; j++)
+                        {
+                            Console.WriteLine(cat[j].Name);
+                            Console.WriteLine(cat[j].Description);
+                            Console.WriteLine(cat[j].CategoryID);
                         }
                     }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WindowsUpdateAgent;
 
 namespace WindowsUpdateAgent
 {
@@ -17,11 +18,20 @@ namespace WindowsUpdateAgent
 		public ICollection<Identity> Superseded { get; set; }
 	}
 
-	public class Identity 
+	public class Identity
 	{
 		//public int RevisionNumber { get; set; } removing revision for the time being
 		public string UpdateID { get; set; }
 	}
+
+    public class WUpdateCollection
+    {
+        public ICollection<WUpdate> WUpdateCol { get; set; }
+    }
+
+
+
+
 
 	/*
 	-		Identity	{System.__ComObject
