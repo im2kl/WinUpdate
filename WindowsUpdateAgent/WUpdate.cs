@@ -12,6 +12,7 @@ namespace WindowsUpdateAgent
 		// Identity > GUID
 		public Identity Identity { get; set; }
 		public string Title { get; set; }
+		public string KBArticleID { get; set; }
 		public string Description { get; set; }
 		public bool EulaAccepted { get; set; }
 		public bool RebootRequired { get; set; }
