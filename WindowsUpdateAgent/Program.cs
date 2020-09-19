@@ -30,23 +30,27 @@ namespace WindowsUpdateAgent
 
             List<WUpdate> thisisalistttt = new List<WUpdate>();
 
+
+
             foreach (IUpdate5 upd in results.Updates)
             {
                 WUpdate updatex = new WUpdate();
                 // these can be leveraged for a profile install 
-                if (upd.AutoSelectOnWebSites &&
-                    !upd.InstallationBehavior.CanRequestUserInput &&
-                    !upd.IsInstalled &&
-                    !upd.IsHidden &&
-                    (upd.InstallationBehavior.RebootBehavior == InstallationRebootBehavior.irbNeverReboots))
-                {
+                //if (upd.AutoSelectOnWebSites &&
+                //    !upd.InstallationBehavior.CanRequestUserInput &&
+                //    !upd.IsInstalled &&
+                //    !upd.IsHidden &&
+                //    (upd.InstallationBehavior.RebootBehavior == InstallationRebootBehavior.irbNeverReboots))
+                //{
                     // Console.WriteLine(upd.Title);
-                    
-                    for(int i =0;i < upd.KBArticleIDs.Count ;i++)
+                    Console.WriteLine("Totalupdates-" + results.Updates.Count);
+
+                    for (int i =0;i < upd.KBArticleIDs.Count ;i++)
                     {
+
                         Identity superceededidentity = new Identity();
 
-                        
+
                         superceededidentity.UpdateID = upd.Identity.UpdateID;
                         updatex.Identity = superceededidentity;
 
@@ -55,50 +59,45 @@ namespace WindowsUpdateAgent
                         updatex.Description = upd.Description;
                         updatex.EulaAccepted = upd.EulaAccepted;
                         updatex.RebootRequired = upd.RebootRequired;
-                        
+
+
+                        Console.WriteLine("Total Super-" + upd.SupersededUpdateIDs.Count);
                         for (int j = 0; j < upd.SupersededUpdateIDs.Count; j++)
                         {
                             // Console.WriteLine(upd.SupersededUpdateIDs[j].ToString());
                             //superceededidentity.UpdateID = upd.SupersededUpdateIDs[j].ToString();
-
-                           // superceededidentity.UpdateID = "testsuperseeded";
+                           
+                            // superceededidentity.UpdateID = "testsuperseeded";
 
                             Console.WriteLine(superceededidentity.UpdateID);
                             //updatex.Superseded.Add(superceededidentity);
                         }
 
                         // NEXT TIME :D
-                        Console.WriteLine("Categories:");
-                        var cat = upd.Categories;
-                        for (int j = 0; j < cat.Count; j++)
+                        Console.WriteLine("Total Categories:" + upd.Categories.Count);
+                        //var cat = upd.Categories;
+                        for (int j = 0; j < upd.Categories.Count; j++)
                         {
-                            Console.WriteLine(cat[j].Name);
-                            Console.WriteLine(cat[j].Description);
-                            Console.WriteLine(cat[j].CategoryID);
+                            Console.WriteLine(upd.Categories[j].Name);
+                            //Console.WriteLine(cat[j].Description);
+                            //Console.WriteLine(cat[j].CategoryID);
                         }
                     }
 
-                    // collection.Add(upd);
-                    //
-                    // add to custom class
-                    //
-                    Console.WriteLine("\n json \n\n");
-
-                    
-
-                    var json = JsonConvert.SerializeObject(updatex, Formatting.Indented);
-                    Console.WriteLine(json.ToString());
-                }
+                //} // if defenition
 
 
                 thisisalistttt.Add(updatex);
                 //wupdateCollection.Add(updatex);
 
-                Console.WriteLine("\n json collection \n\n");
 
-                var jsonx = JsonConvert.SerializeObject(thisisalistttt, Formatting.Indented);
-                Console.WriteLine(jsonx.ToString());
             }
+
+
+            Console.WriteLine("\n json collection \n\n");
+
+            var jsonx = JsonConvert.SerializeObject(thisisalistttt, Formatting.Indented);
+            Console.WriteLine(jsonx.ToString());
 
             // https://social.msdn.microsoft.com/Forums/en-US/8789e9e1-444b-4968-930a-1137681b17c4/how-can-i-query-for-an-accurate-and-localized-list-of-windows-updates-installed-on-a-machine-using?forum=csharpgeneral
 
