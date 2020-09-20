@@ -16,7 +16,7 @@ namespace WindowsUpdateAgent
 		public string Description { get; set; }
 		public bool EulaAccepted { get; set; }
 		public bool RebootRequired { get; set; }
-		public ICollection<Identity> Superseded { get; set; }
+		public List<Identity> Superseded { get; set; }
 	}
 
 	public class Identity
@@ -27,7 +27,7 @@ namespace WindowsUpdateAgent
 
     public class WUpdateCollection
     {
-        public ICollection<WUpdate> WUpdateCol { get; set; }
+        public List<WUpdate> WUpdateCol { get; set; }
     }
 
 

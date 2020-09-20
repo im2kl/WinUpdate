@@ -13,24 +13,15 @@ namespace WindowsUpdateAgent
     {
         static void Main()
         {
-
             UpdateSession session = new UpdateSession();
 
             Console.WriteLine("session start");
             var updateSearcher = session.CreateUpdateSearcher();
            
-            Console.WriteLine("Searching... async");
+            Console.WriteLine("Searching... IsInstalled = 0 and IsHidden = 0");
             var results = updateSearcher.Search("IsInstalled = 0 and IsHidden = 0"); // parameters for search
 
-            UpdateCollection collection = new UpdateCollection();
-
-
-            ICollection<WUpdate> wupdateCollection = new WUpdateCollection().WUpdateCol;
-
-
-            List<WUpdate> thisisalistttt = new List<WUpdate>();
-
-
+            List<WUpdate> updateList = new List<WUpdate>();
 
             foreach (IUpdate5 upd in results.Updates)
             {
@@ -48,11 +39,11 @@ namespace WindowsUpdateAgent
                     for (int i =0;i < upd.KBArticleIDs.Count ;i++)
                     {
 
-                        Identity superceededidentity = new Identity();
+                        Identity updateidentity = new Identity();
+                        List<Identity> superceededidentity = new List<Identity>();
 
-
-                        superceededidentity.UpdateID = upd.Identity.UpdateID;
-                        updatex.Identity = superceededidentity;
+                        updateidentity.UpdateID = upd.Identity.UpdateID;
+                        updatex.Identity = updateidentity;
 
                         updatex.Title = upd.Title;
                         updatex.KBArticleID = upd.KBArticleIDs[0]; //Must change to list of Updates KBs
@@ -60,18 +51,16 @@ namespace WindowsUpdateAgent
                         updatex.EulaAccepted = upd.EulaAccepted;
                         updatex.RebootRequired = upd.RebootRequired;
 
-
                         Console.WriteLine("Total Super-" + upd.SupersededUpdateIDs.Count);
                         for (int j = 0; j < upd.SupersededUpdateIDs.Count; j++)
                         {
-                            // Console.WriteLine(upd.SupersededUpdateIDs[j].ToString());
-                            //superceededidentity.UpdateID = upd.SupersededUpdateIDs[j].ToString();
-                           
-                            // superceededidentity.UpdateID = "testsuperseeded";
 
-                            Console.WriteLine(superceededidentity.UpdateID);
-                            //updatex.Superseded.Add(superceededidentity);
+                            Identity supers = new Identity();
+                            supers.UpdateID = upd.SupersededUpdateIDs[j].ToString();
+                            superceededidentity.Add(supers);
+
                         }
+                        updatex.Superseded = superceededidentity;
 
                         // NEXT TIME :D
                         Console.WriteLine("Total Categories:" + upd.Categories.Count);
@@ -83,20 +72,13 @@ namespace WindowsUpdateAgent
                             //Console.WriteLine(cat[j].CategoryID);
                         }
                     }
-
                 //} // if defenition
-
-
-                thisisalistttt.Add(updatex);
-                //wupdateCollection.Add(updatex);
-
-
+                updateList.Add(updatex); 
             }
-
 
             Console.WriteLine("\n json collection \n\n");
 
-            var jsonx = JsonConvert.SerializeObject(thisisalistttt, Formatting.Indented);
+            var jsonx = JsonConvert.SerializeObject(updateList, Formatting.Indented);
             Console.WriteLine(jsonx.ToString());
 
             // https://social.msdn.microsoft.com/Forums/en-US/8789e9e1-444b-4968-930a-1137681b17c4/how-can-i-query-for-an-accurate-and-localized-list-of-windows-updates-installed-on-a-machine-using?forum=csharpgeneral
