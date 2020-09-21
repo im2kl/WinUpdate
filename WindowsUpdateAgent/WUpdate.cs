@@ -32,8 +32,6 @@ namespace WindowsUpdateAgent
 
 
 
-
-
 	/*
 	-		Identity	{System.__ComObject
 }

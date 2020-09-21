@@ -15,10 +15,8 @@ namespace WindowsUpdateAgent
         {
             UpdateSession session = new UpdateSession();
 
-            Console.WriteLine("session start");
             var updateSearcher = session.CreateUpdateSearcher();
            
-            Console.WriteLine("Searching... IsInstalled = 0 and IsHidden = 0");
             var results = updateSearcher.Search("IsInstalled = 0 and IsHidden = 0"); // parameters for search
 
             List<WUpdate> updateList = new List<WUpdate>();
@@ -33,12 +31,8 @@ namespace WindowsUpdateAgent
                 //    !upd.IsHidden &&
                 //    (upd.InstallationBehavior.RebootBehavior == InstallationRebootBehavior.irbNeverReboots))
                 //{
-                    // Console.WriteLine(upd.Title);
-                    Console.WriteLine("Totalupdates-" + results.Updates.Count);
-
                     for (int i =0;i < upd.KBArticleIDs.Count ;i++)
                     {
-
                         Identity updateidentity = new Identity();
                         List<Identity> superceededidentity = new List<Identity>();
 
@@ -51,23 +45,18 @@ namespace WindowsUpdateAgent
                         updatex.EulaAccepted = upd.EulaAccepted;
                         updatex.RebootRequired = upd.RebootRequired;
 
-                        Console.WriteLine("Total Super-" + upd.SupersededUpdateIDs.Count);
                         for (int j = 0; j < upd.SupersededUpdateIDs.Count; j++)
                         {
-
                             Identity supers = new Identity();
                             supers.UpdateID = upd.SupersededUpdateIDs[j].ToString();
                             superceededidentity.Add(supers);
-
                         }
                         updatex.Superseded = superceededidentity;
 
-                        // NEXT TIME :D
-                        Console.WriteLine("Total Categories:" + upd.Categories.Count);
                         //var cat = upd.Categories;
                         for (int j = 0; j < upd.Categories.Count; j++)
                         {
-                            Console.WriteLine(upd.Categories[j].Name);
+                            //Console.WriteLine(upd.Categories[j].Name);
                             //Console.WriteLine(cat[j].Description);
                             //Console.WriteLine(cat[j].CategoryID);
                         }
@@ -75,8 +64,6 @@ namespace WindowsUpdateAgent
                 //} // if defenition
                 updateList.Add(updatex); 
             }
-
-            Console.WriteLine("\n json collection \n\n");
 
             var jsonx = JsonConvert.SerializeObject(updateList, Formatting.Indented);
             Console.WriteLine(jsonx.ToString());
