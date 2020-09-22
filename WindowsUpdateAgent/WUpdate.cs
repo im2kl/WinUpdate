@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WindowsUpdateAgent;
+using WUApiLib;
 
 namespace WindowsUpdateAgent
 {
@@ -17,6 +19,9 @@ namespace WindowsUpdateAgent
 		public bool EulaAccepted { get; set; }
 		public bool RebootRequired { get; set; }
 		public List<Identity> Superseded { get; set; }
+
+		//Refers to the installation of the patch / allowed or not allowed.
+		public bool AdminInstallAccepted { get; set; }
 	}
 
 	public class Identity
@@ -25,14 +30,80 @@ namespace WindowsUpdateAgent
 		public string UpdateID { get; set; }
 	}
 
-    public class WUpdateCollection
+
+	public class RemoteWindowsUpdater
     {
-        public List<WUpdate> WUpdateCol { get; set; }
+		public string GetUpdateList()
+        {
+			UpdateSession session = new UpdateSession();
+
+			var updateSearcher = session.CreateUpdateSearcher();
+
+			var results = updateSearcher.Search("IsInstalled = 0 and IsHidden = 0"); // parameters for search
+
+			List<WUpdate> updateList = new List<WUpdate>();
+
+			foreach (IUpdate5 upd in results.Updates)
+			{
+				WUpdate updatex = new WUpdate();
+				// these can be leveraged for a profile install 
+				//if (upd.AutoSelectOnWebSites &&
+				//    !upd.InstallationBehavior.CanRequestUserInput &&
+				//    !upd.IsInstalled &&
+				//    !upd.IsHidden &&
+				//    (upd.InstallationBehavior.RebootBehavior == InstallationRebootBehavior.irbNeverReboots))
+				//{
+				for (int i = 0; i < upd.KBArticleIDs.Count; i++)
+				{
+					Identity updateidentity = new Identity();
+					List<Identity> superceededidentity = new List<Identity>();
+
+					updateidentity.UpdateID = upd.Identity.UpdateID;
+					updatex.Identity = updateidentity;
+
+					updatex.Title = upd.Title;
+					updatex.KBArticleID = upd.KBArticleIDs[0]; //Must change to list of Updates KBs
+					updatex.Description = upd.Description;
+					updatex.EulaAccepted = upd.EulaAccepted;
+					updatex.RebootRequired = upd.RebootRequired;
+
+					for (int j = 0; j < upd.SupersededUpdateIDs.Count; j++)
+					{
+						Identity supers = new Identity();
+						supers.UpdateID = upd.SupersededUpdateIDs[j].ToString();
+						superceededidentity.Add(supers);
+					}
+					updatex.Superseded = superceededidentity;
+
+					//var cat = upd.Categories;
+					for (int j = 0; j < upd.Categories.Count; j++)
+					{
+						//Console.WriteLine(upd.Categories[j].Name);
+						//Console.WriteLine(cat[j].Description);
+						//Console.WriteLine(cat[j].CategoryID);
+					}
+
+					updatex.AdminInstallAccepted = false;
+				}
+				//} // if defenition
+				updateList.Add(updatex);
+			}
+
+			var jsonx = JsonConvert.SerializeObject(updateList, Formatting.Indented);
+
+			return jsonx.ToString();
+		}
+
     }
 
-
-
 	/*
+	 * 
+	 * 
+	 * 
+			// https://social.msdn.microsoft.com/Forums/en-US/8789e9e1-444b-4968-930a-1137681b17c4/how-can-i-query-for-an-accurate-and-localized-list-of-windows-updates-installed-on-a-machine-using?forum=csharpgeneral
+
+	 * 
+	 * 
 	-		Identity	{System.__ComObject
 }
 System.__ComObject
