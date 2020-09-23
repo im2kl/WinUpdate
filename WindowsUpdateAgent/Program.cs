@@ -15,7 +15,17 @@ namespace WindowsUpdateAgent
         {
             RemoteWindowsUpdater searcher = new RemoteWindowsUpdater();
 
-            Console.WriteLine(searcher.GetUpdateList());
+            var updatelistjson = searcher.GetUpdateList();
+
+            // INstallation
+            var updateList = JsonConvert.DeserializeObject<List<WUpdate>>(updatelistjson);
+
+
+            
+            Console.WriteLine(updateList[0].Title);
+
+            //Identity updateidentity = new Identity();
+            //List<Identity> superceededidentity = new List<Identity>();
 
 
             Console.ReadKey();
