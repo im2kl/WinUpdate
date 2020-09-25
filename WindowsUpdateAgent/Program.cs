@@ -5,21 +5,23 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using WUApiLib;
+
 
 namespace WindowsUpdateAgent
 {
-    class WinUpdate
+    class RemoteWinUpdateAgent
     {
         static void Main()
         {
-            RemoteWindowsUpdater searcher = new RemoteWindowsUpdater();
+            WuDetect searcher = new WuDetect();
 
             var updatelistjson = searcher.GetUpdateList();
 
             // INstallation
-            var updateList = JsonConvert.DeserializeObject<List<WUpdate>>(updatelistjson);
+            var updateList = JsonConvert.DeserializeObject<List<WuModel>>(updatelistjson);
 
+            WuDownloader updateDownloader = new WuDownloader();
+            updateDownloader.Download(updateList);
 
             
             Console.WriteLine(updateList[0].Title);
