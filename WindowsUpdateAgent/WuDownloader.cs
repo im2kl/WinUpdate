@@ -12,14 +12,17 @@ namespace WindowsUpdateAgent
     {
         UpdateCollection updatecollection = new UpdateCollection();
 
+        private IUpdate Entry = null;
         public void Download(List<WuModel> updateList)
         {
-
-            for (int i = 0; i < updateList.Count; i++ )
+            foreach(WuModel updatex in updateList)
             {
-                Console.WriteLine(updateList.Count);
-            }
 
+
+
+
+
+            }
 
         }
 

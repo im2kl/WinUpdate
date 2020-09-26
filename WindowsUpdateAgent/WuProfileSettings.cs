@@ -8,5 +8,7 @@ namespace WindowsUpdateAgent
 {
     class WuProfileSettings
     {
+
+
     }
 }
