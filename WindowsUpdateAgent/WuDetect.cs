@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using WUApiLib;
 
+
 namespace WindowsUpdateAgent
 {
  	public class WuDetect
@@ -46,9 +47,11 @@ namespace WindowsUpdateAgent
 
 					for (int j = 0; j < upd.SupersededUpdateIDs.Count; j++)
 					{
-						Identity supers = new Identity();
-						supers.UpdateID = upd.SupersededUpdateIDs[j].ToString();
-						superceededidentity.Add(supers);
+                        Identity supers = new Identity
+                        {
+                            UpdateID = upd.SupersededUpdateIDs[j].ToString()
+                        };
+                        superceededidentity.Add(supers);
 					}
 					updatex.Superseded = superceededidentity;
 
