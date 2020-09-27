@@ -12,7 +12,7 @@ namespace WindowsUpdateAgent
 {
     class WuProfileSettings
     {
-        static private string mWuGPO = @"SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate";
+        private static readonly string mWuGPO = @"SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate";
 
         public enum AUOptions
         {
