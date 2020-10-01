@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -15,25 +16,18 @@ namespace WindowsUpdateAgent
         static void Main()
         {
             WuDetect searcher = new WuDetect();
-
             var updatelistjson = searcher.GetUpdateList();
+            //var updateList = JsonConvert.DeserializeObject<List<WuModel>>(updatelistjson);
 
-            // INstallation
-            var updateList = JsonConvert.DeserializeObject<List<WuModel>>(updatelistjson);
 
-            WuDownloader updateDownloader = new WuDownloader();
-            updateDownloader.Download(updateList);
+            Console.WriteLine(updatelistjson);
 
-            
-            Console.WriteLine(updateList[0].Title);
 
             //Identity updateidentity = new Identity();
             //List<Identity> superceededidentity = new List<Identity>();
-            Thread.Sleep(9000);
 
-            WuDownloader down = new WuDownloader();
-
-            down.GetWindowsUpdates();
+            //WuDownloader down = new WuDownloader();
+            //down.GetWindowsUpdates();
 
             Console.ReadKey();
         }

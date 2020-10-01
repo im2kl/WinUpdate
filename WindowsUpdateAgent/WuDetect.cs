@@ -42,6 +42,7 @@ namespace WindowsUpdateAgent
 					updatex.Title = upd.Title;
 					updatex.KBArticleID = upd.KBArticleIDs[0]; //Must change to list of Updates KBs
 					updatex.Description = upd.Description;
+					updatex.DownloadSize = upd.MaxDownloadSize;
 					updatex.EulaAccepted = upd.EulaAccepted;
 					updatex.RebootRequired = upd.RebootRequired;
 

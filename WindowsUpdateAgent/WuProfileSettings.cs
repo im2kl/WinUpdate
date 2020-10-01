@@ -24,7 +24,7 @@ namespace WindowsUpdateAgent
             ManagedByAdmin = 5
         }
 
-        static public void ConfigAU(AUOptions option)
+        public void ConfigAU(AUOptions option)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace WindowsUpdateAgent
             catch { }
         }
 
-        static public void HideUpdatePage(bool hide = true)
+        public void HideUpdatePage(bool hide = true)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace WindowsUpdateAgent
             catch { }
         }
 
-        static public bool IsUpdatePageHidden()
+        public bool IsUpdatePageHidden()
         {
             try
             {
