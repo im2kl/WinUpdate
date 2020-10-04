@@ -28,7 +28,7 @@ namespace WindowsUpdateAgent
         {
             try
             {
-                var subKey = Registry.LocalMachine.CreateSubKey(mWuGPO + @"\AU");
+                var subKey = Registry.LocalMachine.CreateSubKey(mWuGPO + @"\AU", true);
                 switch (option)
                 {
                     case AUOptions.Default: //Automatic(default)
@@ -70,12 +70,82 @@ namespace WindowsUpdateAgent
             }
             catch { }
         }
+        public AUOptions GetAU()
+        {
+            AUOptions option = AUOptions.Default;
+            try
+            {
+                var subKey = Registry.LocalMachine.OpenSubKey(mWuGPO + @"\AU", false);
+                object value_no = subKey == null ? null : subKey.GetValue("NoAutoUpdate");
+                if (value_no == null || (int)value_no == 0)
+                {
+                    object value_au = subKey == null ? null : subKey.GetValue("AUOptions");
+                    switch (value_au == null ? 0 : (int)value_au)
+                    {
+                        case 0: option = AUOptions.Default; break;
+                        case 2: option = AUOptions.Notification; break;
+                        case 3: option = AUOptions.Download; break;
+                        //case 4: option = AUOptions.Scheduled; break;
+                        case 5: option = AUOptions.ManagedByAdmin; break;
+                    }
+                }
+                else
+                {
+                    option = AUOptions.Disabled;
+                }
 
-        public void HideUpdatePage(bool hide = true)
+                //object value_day = subKey.GetValue("ScheduledInstallDay");
+                //day = value_day != null ? (int)value_day : 0;
+                //object value_time = subKey.GetValue("ScheduledInstallTime");
+                //time = value_time != null ? (int)value_time : 0;
+            }
+            catch { }
+            return option;
+        }
+
+        public void ConfigDriverAU(int option)
         {
             try
             {
-                var subKey = Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer");
+                var subKey = Registry.LocalMachine.CreateSubKey(mWuGPO, true);
+                switch (option)
+                {
+                    case 0: // CheckState.Unchecked:
+                        subKey.SetValue("ExcludeWUDriversInQualityUpdate", 1);
+                        break;
+                    case 2: // CheckState.Indeterminate:
+                        subKey.DeleteValue("ExcludeWUDriversInQualityUpdate", false);
+                        break;
+                    case 1: // CheckState.Checked:
+                        subKey.SetValue("ExcludeWUDriversInQualityUpdate", 0);
+                        break;
+                }
+            }
+            catch { }
+        }
+
+         public int GetDriverAU()
+        {
+            try
+            {
+                var subKey = Registry.LocalMachine.OpenSubKey(mWuGPO, false);
+                object value_drv = subKey == null ? null : subKey.GetValue("ExcludeWUDriversInQualityUpdate");
+
+                if (value_drv == null)
+                    return 2; // CheckState.Indeterminate;
+                else if ((int)value_drv == 1)
+                    return 0; // CheckState.Unchecked;
+                else //if ((int)value_drv == 0)
+                    return 1; // CheckState.Checked
+            }
+            catch { }
+            return 2;
+        }
+        public void HideUpdatePage(bool hide)
+        {
+            try
+            {
+                var subKey = Registry.LocalMachine.CreateSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer", true);
                 if (hide)
                     subKey.SetValue("SettingsPageVisibility", "hide:windowsupdate");
                 else
@@ -89,13 +159,12 @@ namespace WindowsUpdateAgent
             try
             {
                 var subKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer");
-                string value = subKey?.GetValue("SettingsPageVisibility", "").ToString();
+                string value = subKey == null ? null : subKey.GetValue("SettingsPageVisibility", "").ToString();
                 return value.Contains("hide:windowsupdate");
             }
             catch { }
             return false;
         }
-
 
 
     }
