@@ -16,6 +16,15 @@ namespace WindowsUpdateAgent
         static void Main()
         {
             Console.WriteLine("start");
+
+            RPC rpc = new RPC();
+            rpc.RPCport = 5002;
+            rpc.Listen();
+
+            Console.WriteLine("out of RPC");
+
+
+
             WuProfileSettings settings = new WuProfileSettings();
 
             if (settings.IsUpdatePageHidden())

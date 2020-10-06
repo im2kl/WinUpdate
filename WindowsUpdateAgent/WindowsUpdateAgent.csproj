@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RPC.cs" />
     <Compile Include="WuDetect.cs" />
     <Compile Include="WuDownloader.cs" />
     <Compile Include="WuInstall.cs" />
