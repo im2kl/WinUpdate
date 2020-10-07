@@ -19,7 +19,7 @@ namespace WindowsUpdateAgent
 
             RPC rpc = new RPC();
             rpc.RPCport = 5002;
-            rpc.Listen();
+            rpc.StartListening();
 
             Console.WriteLine("out of RPC");
 
