@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
 using System.Data;
+using System.Runtime.CompilerServices;
 
 namespace WindowsUpdateAgent
 {
@@ -36,12 +37,12 @@ namespace WindowsUpdateAgent
         //            aproval bool)";
         //    cmd.ExecuteNonQuery();
         //}
-        private void setDummy()
-        {
-            ExecuteQuery("INSERT INTO updates(guid,approval) VALUES (1,TRUE)");
-            ExecuteQuery("INSERT INTO updates(guid,approval) VALUES (2,FALSE)");
-            ExecuteQuery("INSERT INTO updates(guid,approval) VALUES (3,TRUE)");
-        }
+        //private void setDummy()
+        //{
+        //    ExecuteQuery("INSERT INTO updates(guid,approval) VALUES (1,TRUE)");
+        //    ExecuteQuery("INSERT INTO updates(guid,approval) VALUES (2,FALSE)");
+        //    ExecuteQuery("INSERT INTO updates(guid,approval) VALUES (3,TRUE)");
+        //}
 
         private void SetConnection()
         {
@@ -57,12 +58,12 @@ namespace WindowsUpdateAgent
             sql_cmd.ExecuteNonQuery();
             sql_con.Close();
         }
-
+ 
         public void CreateDB()
         {
             ExecuteQuery("DROP TABLE IF EXISTS updates");
             ExecuteQuery("CREATE TABLE updates(guid STRING PRIMARY KEY,approval bool)");
-            setDummy(); //// testing
+            //setDummy(); //// testing
         }
         public bool QueryApproval(string UpdateGuid)
         {
