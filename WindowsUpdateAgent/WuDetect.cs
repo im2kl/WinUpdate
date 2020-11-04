@@ -11,16 +11,30 @@ namespace WindowsUpdateAgent
 {
  	public class WuDetect
 	{
-		public string GetUpdateList()
+
+		private List<WuModel> updateList = new List<WuModel>();
+
+		UpdateSession session = new UpdateSession();
+		private IUpdateSearcher updateSearcher;
+		private ISearchResult results;
+
+
+		public WuDetect()
+        {
+			updateSearcher = session.CreateUpdateSearcher();
+			results = updateSearcher.Search("IsInstalled = 0 and IsHidden = 0"); // parameters for search
+			SortUpdateList();
+		}
+
+		public string GetUpdatesJSON()
+        {
+			var jsonx = JsonConvert.SerializeObject(updateList, Formatting.Indented);
+
+			return jsonx.ToString();
+		}
+		private void SortUpdateList()
 		{
-			UpdateSession session = new UpdateSession();
-
-			var updateSearcher = session.CreateUpdateSearcher();
-
-			var results = updateSearcher.Search("IsInstalled = 0 and IsHidden = 0"); // parameters for search
-
-			List<WuModel> updateList = new List<WuModel>();
-
+			
 			foreach (IUpdate5 upd in results.Updates)
 			{
 				WuModel updatex = new WuModel();
@@ -70,9 +84,7 @@ namespace WindowsUpdateAgent
 				updateList.Add(updatex);
 			}
 
-			var jsonx = JsonConvert.SerializeObject(updateList, Formatting.Indented);
 
-			return jsonx.ToString();
 		}
 
 	}
