@@ -79,13 +79,18 @@ namespace WindowsUpdateAgent
 
             sql_con.Close();
             //Grid.DataSource = DT;
-            if (DS.Tables[0].Rows[0]["approval"].ToString() == "True") {
-                return true;
-            }
-            else
+            try
             {
-                return false;
+                if (DS.Tables[0].Rows[0]["approval"].ToString() == "True")
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
+            catch { return false; }
         }
 
 
