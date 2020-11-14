@@ -92,8 +92,9 @@ namespace WindowsUpdateAgent
             }
             catch { return false; }
         }
-
-
-
+        public void SetApproval(string UpdateGuid, bool approval)
+        {
+            ExecuteQuery("UPDATE updates SET approval = '" + approval + "'WHERE guid = '" + UpdateGuid + "'");
+        }
     }
 }
